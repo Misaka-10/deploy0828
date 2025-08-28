@@ -44,7 +44,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: node-app
-          path: .
+          path: release.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -56,11 +56,14 @@ jobs:
         with:
           name: node-app
       
+      - name: Unzip artifact for deployment
+        run: unzip release.zip
+      
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'app-002-gen10-step3-1-node-oshima68'
           slot-name: 'Production'
-          package: ./deploy #4
+          package: ./deploy 
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_9F7A7EDE5D86401D9869419CAF6FCD60 }}
